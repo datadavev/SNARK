@@ -1,0 +1,2 @@
+# SNARK
+Simply Normalizing ARKs
