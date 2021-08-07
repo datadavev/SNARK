@@ -1,13 +1,17 @@
 [tool.poetry]
 name = "snark"
-version = "0.1.0"
+version = "0.2.0"
 description = "Simply normalizing ARKs"
 authors = ["datadavev <605409+datadavev@users.noreply.github.com>"]
 license = "Apache 2.0"
+include =["index.html", "web/favicon.ico"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
 click = "^8.0.1"
+
+[tool.poetry.scripts]
+snark = "snark.main:main"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
