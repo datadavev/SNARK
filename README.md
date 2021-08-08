@@ -38,4 +38,4 @@ mkvirtualenv SNARK
 poetry install
 ```
 
-The `mkvirtualenv` step is optional, without it `poetry` will make something for you.
+The `mkvirtualenv` step is optional. Without it, `poetry` will make something for you.
