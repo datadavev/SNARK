@@ -17,8 +17,8 @@ pipx install git+https://github.com/datadavev/SNARK.git
 Snark will then be available from the command line:
 
 ```bash
-$ snark "https://n2t.net/ark:/some/fake.ark"
-ark:some/fake.ark
+$ snark "https://example.org/ark:12345/x54xz321/s3/f8.05v.tiff"
+ark:12345/x54xz321/s3/f8.05v.tiff
 ```
 
 Snark has a local web UI as well:
