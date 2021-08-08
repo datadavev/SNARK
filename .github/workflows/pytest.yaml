@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
 
     steps:
       - name: Checkout
@@ -49,6 +49,6 @@ jobs:
           gistID: 613dd58b00b0e7ba3af8b049ebc5a9ff
           filename: snark_coverage_badge.json
           label: Coverage
-          message: "${{fromJson(steps.set_c_pct).totals.percent_covered}}"
+          message: "${{fromJson(steps.set_c_pct.totals).percent_covered}}"
           color: orange
           namedLogo: Pytest
