@@ -1,12 +1,24 @@
 """
 SNARK implements lexical normalization for ARK identifiers.
 
+ARK Spec:
+  https://datatracker.ietf.org/doc/html/draft-kunze-ark-27
 """
 
 import re
 import urllib.parse
 import logging
 import enum
+
+# (^ark:)([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})(/[a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)
+RE_ARK = re.compile(
+    (
+        r"(^ark:)"
+        r"([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})"
+        r"/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})"
+        r"([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)"
+    )
+)
 
 
 class Inflection(enum.Enum):
@@ -15,10 +27,31 @@ class Inflection(enum.Enum):
     POLICY = 3
 
 
+def piecesOfARK(ark):
+    """
+
+    Args:
+        ark: normalized ARK
+
+    Returns:
+        dict {valid:T/F, naan, shoulder, remainder)
+
+    """
+    res = {"valid": False, "naan": None, "name": None, "qualifier": None}
+    mtch = RE_ARK.match(ark)
+    if not mtch:
+        return res
+    res["valid"] = True
+    res["naan"] = mtch.group(2)
+    res["name"] = mtch.group(3)
+    res["qualifier"] = mtch.group(4)
+    return res
+
+
 def normalizeARK(uark: str, inflection_char="?") -> tuple[str, Inflection]:
     inflection = Inflection.NONE
     res = [
-        uark,
+        uark.strip(),
     ]
     # 1. The NMA part (eg, everything from an initial "https://" up to the
     # next slash), if present is removed.
@@ -33,7 +66,7 @@ def normalizeARK(uark: str, inflection_char="?") -> tuple[str, Inflection]:
     # 3. The first case-insensitive match on "ark:/" or "ark:" is
     # converted to "ark:" (replacing any upper case letters and
     # removing any terminal '/')
-    res.append(re.sub(r"ark:/?", "ark:", res[-1], flags=re.I))
+    res.append(re.sub(r"ark:/*", "ark:", res[-1], flags=re.I))
     logging.debug("03: %s", res[-1])
 
     # 4. In the string that remains, the two characters following every
