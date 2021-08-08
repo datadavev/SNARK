@@ -1,6 +1,6 @@
 # SNARK
 
-Simply Normalizing ARKs
+Simply Normalizing [ARK](https://datatracker.ietf.org/doc/html/draft-kunze-ark-27)s
 
 Online at [datadavev.github.io/SNARK](https://datadavev.github.io/SNARK/).
 
