@@ -48,7 +48,7 @@ def piecesOfARK(ark):
     return res
 
 
-def normalizeARK(uark: str, inflection_char="?") -> tuple[str, Inflection]:
+def normalizeARK(uark, inflection_char="?"):
     inflection = Inflection.NONE
     res = [
         uark.strip(),
