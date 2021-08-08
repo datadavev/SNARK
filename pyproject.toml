@@ -4,7 +4,7 @@ version = "0.2.0"
 description = "Simply normalizing ARKs"
 authors = ["datadavev <605409+datadavev@users.noreply.github.com>"]
 license = "Apache 2.0"
-include =["index.html", "web/favicon.ico"]
+include =["index.html", "web/favicon.ico", "web/ouroboros.png"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
