@@ -38,4 +38,12 @@ jobs:
           source .venv/bin/activate
           coverage run -m pytest tests/
           coverage report
-        
+      - name: Create coverage badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 613dd58b00b0e7ba3af8b049ebc5a9ff
+          filename: snark_coverage_badge.json
+          label: Coverage
+          message: test
+          color: orange
