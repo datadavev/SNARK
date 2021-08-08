@@ -8,8 +8,6 @@ Online at [datadavev.github.io/SNARK](https://datadavev.github.io/SNARK/).
 
 ![pytest workflow](https://github.com/datadavev/SNARK/actions/workflows/pytest.yaml/badge.svg)
 
-![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/datadavev/613dd58b00b0e7ba3af8b049ebc5a9ff/raw/snark_coverage_badge.json)
-
 ## Installation
 
 Snark can be installed locally using `pipx`, for example:
