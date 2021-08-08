@@ -6,7 +6,7 @@ Online at [datadavev.github.io/SNARK](https://datadavev.github.io/SNARK/).
 
 **Note: 2021-08-08 Not yet released.** The normalization rules are not verfiied and are subject to change.
 
-![pytest workflow](https://github.com/datadavev/SNARK/actions/workflows/pytest/badge.svg)
+![pytest workflow](https://github.com/datadavev/SNARK/actions/workflows/pytest.yaml/badge.svg)
 
 ## Installation
 
