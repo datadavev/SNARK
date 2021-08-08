@@ -150,9 +150,9 @@ document.getElementById("snarker").style.display = "block";
                 if (typeof nidx != "undefined") {
                     _naa = NAANs.naa[nidx];
                 }
-                t += "\nNAAN:" + parts.naan;
-                t += "\nName:" + parts.name;
-                t += "\nQual:" + parts.qualifier;
+                t += ((typeof parts.naan == "string") ? "\nNAAN:" + parts.naan : "");
+                t += ((typeof parts.name == "string") ? "\nName:" + parts.name : "");
+                t += ((typeof parts.qualifier == "string") ? "\nQual:" + parts.qualifier : "");
                 t += "\n" + JSON.stringify(_naa, null, 2);
             }
             rawdest.innerText = t;
