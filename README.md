@@ -4,6 +4,8 @@ Simply Normalizing ARKs
 
 Online at [datadavev.github.io/SNARK](https://datadavev.github.io/SNARK/).
 
+**Note: 2021-08-08 Not yet released.** The normalization rules are not verfiied and are subject to change.
+
 ## Installation
 
 Snark can be installed locally using `pipx`, for example:
