@@ -38,17 +38,4 @@ jobs:
           source .venv/bin/activate
           coverage run -m pytest tests/
           coverage json --omit '*/site-packages/*'
-      - id: set_c_pct
-        run: |
-          JSON=$(cat ./coverage.json)
-          echo "::set-output name=covJson::$JSON"
-      - name: Create coverage badge
-        uses: schneegans/dynamic-badges-action@v1.1.0
-        with:
-          auth: ${{ secrets.GIST_SECRET }}
-          gistID: 613dd58b00b0e7ba3af8b049ebc5a9ff
-          filename: snark_coverage_badge.json
-          label: Coverage
-          message: "${{fromJson(steps.set_c_pct).totals.percent_covered}}"
-          color: orange
-          namedLogo: Pytest
+
