@@ -7,7 +7,7 @@ Online at [datadavev.github.io/SNARK](https://datadavev.github.io/SNARK/).
 **Note: 2021-08-08 Not yet released.** The normalization rules are not verfiied and are subject to change.
 
 ![pytest workflow](https://github.com/datadavev/SNARK/actions/workflows/pytest.yaml/badge.svg)
-[![CodeQL](https://github.com/datadavev/SNARK/actions/workflows/codeql-analysys.yaml/badge.svg)](https://github.com/datadavev/SNARK/actions/workflows?query=workflow%3Acodeql-analysis.yaml)
+[![CodeQL](https://github.com/datadavev/SNARK/workflows/CodeQL/badge.svg)](https://github.com/datadavev/SNARK/workflows?query=workflow%3ACodeQL)
 
 ## Installation
 
