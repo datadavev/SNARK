@@ -29,6 +29,9 @@
             font-family: "Cousine", "Monaco", monospace;
             font-size: 14px;
         }
+        code {
+            font-size: inherit;
+        }
         /*
         pre {
             font-family: inherit;
@@ -74,6 +77,7 @@
         .valid {
             background-color: palegreen;
         }
+        .grabbing {cursor: zoom-in;}
     </style>
     <script>
         const NAANJ_URL = "https://raw.githubusercontent.com/datadavev/naanj/main/data/naanj.json";
@@ -149,6 +153,9 @@
                     value looks like an ARK identifier, then the identifier part of the string is highlighted
                     in <span class="valid">green</span>.
                 </p>
+                <p>For example, this <code id="eg_valid" class="grabbing">http://n2t.net/ark:/65665/30002e5e4-91a3-4343-9519-2aab489dfbfd</code>
+                    should be valid.</p>
+                <p>This string <code id="eg_invalid" class="grabbing">https://example.net/ark:1234/invalid</code> should be invalid.</p>
                 <p>1. <a href="https://datatracker.ietf.org/doc/html/draft-kunze-ark-27#section-2.7">The ARK Identifier Scheme, draft-kunze-ark-27 § 2.7</a></p>
             </details>
         </section>
@@ -225,7 +232,13 @@ document.getElementById("snarker").style.display = "block";
                     document.getElementById("ark_issuer").innerText = _naa.who.literal;
                 } else {
                     arkdest.className = "invalid"
+                    document.getElementById("ark_naan").innerText = "";
+                    document.getElementById("ark_name").innerText = "";
+                    document.getElementById("ark_qual").innerText = "";
+                    document.getElementById("ark_issuer").innerText = "";
+                    infdest.innerText = "";
                 }
+
                 t += ((typeof parts.naan == "string") ? "\nNAAN:" + parts.naan : "");
                 t += ((typeof parts.name == "string") ? "\nName:" + parts.name : "");
                 t += ((typeof parts.qualifier == "string") ? "\nQual:" + parts.qualifier : "");
@@ -252,6 +265,19 @@ function doSnark(eve) {
 
 var ele = document.getElementById("insnark");
 ele.addEventListener('input', doSnark);
+
+document.getElementById("eg_valid").addEventListener('click',(e) => {
+    var ele = document.getElementById("insnark");
+    ele.value = e.target.innerText;
+    doSnark({"target": ele});
+});
+
+document.getElementById("eg_invalid").addEventListener('click',(e) => {
+    var ele = document.getElementById("insnark");
+    ele.value = e.target.innerText;
+    doSnark({"target": ele});
+});
+
 getSiteInfo();
 </script>
 </body>
