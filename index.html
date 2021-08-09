@@ -119,16 +119,20 @@
         <section id="snarker">
             <p>Type in the supposed ARK:</p>
             <form>
-                <input id="insnark" size="80" placeholder="https//fake.net/some/fake/ark:/12345/value"/>
+                <input id="insnark" size="80" placeholder="https://fake.net/some/fake/ark:/12345/value"/>
             </form>
             <div id="results">
-                <table>
-                    <tr><td>Inflection</td><td id="inflection"></td></tr>
-                    <tr><td>ARK</td><td id="ark"></td></tr>
-                    <tr><td>NAAN</td><td id="ark_naan"></td></tr>
-                    <tr><td>Name</td><td id="ark_name"></td></tr>
-                    <tr><td>Qualifier</td><td id="ark_qual"></td></tr>
-                </table>
+                <p id="ark"></p>
+                <details>
+                    <summary>Pieces of ARK</summary>
+                    <table>
+                        <tr><td>Inflection</td><td id="inflection"></td></tr>
+                        <tr><td>NAAN</td><td id="ark_naan"></td></tr>
+                        <tr><td>Name</td><td id="ark_name"></td></tr>
+                        <tr><td>Qualifier</td><td id="ark_qual"></td></tr>
+                        <tr><td>Issuer</td><td id="ark_issuer"></td></tr>
+                    </table>
+                </details>
                 <details>
                     <summary>Processing details</summary>
                 <pre id="outsnark">
@@ -172,6 +176,7 @@ document.getElementById("snarker").style.display = "block";
         var res = jsPiecesOfARK(ark);
         return {
             "valid": res["$string_dict"].valid[0],
+            "ark": res["$string_dict"].ark[0],
             "naan": res["$string_dict"].naan[0],
             "name": res["$string_dict"].name[0],
             "qualifier": res["$string_dict"].qualifier[0],
@@ -189,20 +194,21 @@ document.getElementById("snarker").style.display = "block";
                 t = t + i + ": \"" + lines[i] + "\"\n"
             }
             infdest.innerText = infl;
-            arkdest.innerText = lines[lines.length-1];
+            arkdest.innerHTML = lines[lines.length-1];
             if (parts !== null) {
+                var _naa = {"who":{"literal":"Not a NAA"}};
+                var nidx = NAANi[parts.naan];
+                if (typeof nidx != "undefined") {
+                    _naa = NAANs.naa[nidx];
+                }
                 if (parts.valid) {
                     arkdest.className = "valid"
                     document.getElementById("ark_naan").innerText = parts.naan;
                     document.getElementById("ark_name").innerText = parts.name;
                     document.getElementById("ark_qual").innerText = parts.qualifier;
+                    document.getElementById("ark_issuer").innerText = _naa.who.literal;
                 } else {
                     arkdest.className = "invalid"
-                }
-                var _naa = {"who":"Not a NAA"};
-                var nidx = NAANi[parts.naan];
-                if (typeof nidx != "undefined") {
-                    _naa = NAANs.naa[nidx];
                 }
                 t += ((typeof parts.naan == "string") ? "\nNAAN:" + parts.naan : "");
                 t += ((typeof parts.name == "string") ? "\nName:" + parts.name : "");

@@ -10,13 +10,15 @@ import urllib.parse
 import logging
 import enum
 
-# (^ark:)([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)
+# ((ark:)([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*))
 RE_ARK = re.compile(
     (
+        r"("
         r"(^ark:)"
         r"([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})"
         r"\/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})"
         r"([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)"
+        r")"
     )
 )
 
@@ -37,14 +39,15 @@ def piecesOfARK(ark):
         dict {valid:T/F, naan, shoulder, remainder)
 
     """
-    res = {"valid": False, "naan": None, "name": None, "qualifier": None}
+    res = {"valid": False, "ark":None, "naan": None, "name": None, "qualifier": None}
     mtch = RE_ARK.match(ark)
     if not mtch:
         return res
     res["valid"] = True
-    res["naan"] = mtch.group(2)
-    res["name"] = mtch.group(3)
-    res["qualifier"] = mtch.group(4)
+    res["ark"] = mtch.group(1)
+    res["naan"] = mtch.group(3)
+    res["name"] = mtch.group(4)
+    res["qualifier"] = mtch.group(5)
     return res
 
 
