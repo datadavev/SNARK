@@ -19,7 +19,7 @@ test_arks = [
     ],
     [
         "https://example.org/ark:12345/x54xz321/%23%40/",
-        "ark:12345/x54xz321/#@/",
+        "ark:12345/x54xz321/#@",
         snark.Inflection.NONE,
     ],
     [
