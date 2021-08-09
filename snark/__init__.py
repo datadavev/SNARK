@@ -10,12 +10,12 @@ import urllib.parse
 import logging
 import enum
 
-# (^ark:)([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})(/[a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)
+# (^ark:)([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)
 RE_ARK = re.compile(
     (
         r"(^ark:)"
         r"([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})"
-        r"/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})"
+        r"\/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})"
         r"([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)"
     )
 )
@@ -104,6 +104,10 @@ def normalizeARK(uark, inflection_char="?"):
     # character on either side.
     _ark = re.sub(r"(/[/\.]+)", r"/", res[-1])
     _ark = re.sub(r"\.[\./]+", r".", _ark)
+    if _ark[0] in [".","/"]:
+        _ark = _ark[1:]
+    if _ark[-1] in [".","/"]:
+        _ark = _ark[:-1]
     res.append(_ark)
     logging.debug("07: %s", res[-1])
 
