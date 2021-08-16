@@ -16,8 +16,8 @@ RE_ARK = re.compile(
         r"("
         r"(^ark:)"
         r"([1-9bcdfghjkmnpqrstvwxz][0-9bcdfghjkmnpqrstvwxz]{4})"
-        r"\/([a-zA-Z0-9\=\~\*\+\@\_\$]{2,128})"
-        r"([a-zA-Z0-9\=\~\*\+\@\_\$\.\/]*)"
+        r"\/([a-zA-Z0-9\=\~\*\+\@\_\$\%]{2,128})"
+        r"([a-zA-Z0-9\=\~\*\+\@\_\$\.\/\%]*)"
         r")"
     )
 )
@@ -52,6 +52,9 @@ def piecesOfARK(ark):
 
 
 def normalizeARK(uark, inflection_char="?"):
+    def _pctUpper(matchobj):
+        return matchobj.group(0).upper()
+
     inflection = Inflection.NONE
     res = [
         uark.strip(),
@@ -75,9 +78,12 @@ def normalizeARK(uark, inflection_char="?"):
     # 4. In the string that remains, the two characters following every
     # occurrence of `%' are converted to lower case. The case of all
     # other letters in the ARK string must be preserved
-    _ark = urllib.parse.unquote(res[-1])
+    # Changd to UPPERCASE in revision spec 28
+    res.append(re.sub(r"\%[0-9a-fA-F]{2}", _pctUpper, res[-1], flags=re.I))
+
+    #_ark = urllib.parse.unquote(res[-1])
     # white space may be percent encoded
-    res.append(_ark.strip())
+    #res.append(_ark.strip())
     logging.debug("04: %s", res[-1])
 
     # 5. All hyphens are removed.
