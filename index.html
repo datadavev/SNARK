@@ -13,133 +13,84 @@
                     "title": "SNARK",
                     "about": "https://github.com/datadavev/SNARK",
                     "abstract": "A web interface to SNARK, providing lexical normalization for ARK identifiers.",
-                    "author": {"@id": "https://orcid.org/0000-0002-6513-4996"},
+                    "author": {
+                        "@id": "https://orcid.org/0000-0002-6513-4996"
+                    },
                     "dateCreated": "2021-08-07"
                 }
             ]
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js">
-    </script>
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <style>
-        body {
-            font-family: "Cousine", "Monaco", monospace;
-            font-size: 14px;
-        }
-        code {
-            font-size: inherit;
-        }
-        /*
-        pre {
-            font-family: inherit;
-        }
-        input {
-            font-family: inherit;
-            font-size: 1rem;
-        }
-         */
-        #insnark {
-            width: 100%;
-        }
-        #snarker {
-            display: none;
-        }
-        #loader {
-            /*position: absolute;*/
-            left: 40%;
-            top: 10%;
-            z-index: 1;
-            text-align: center;
-            min-height: 300px;
-        }
-        #spinner {
-            animation: rotation 2s infinite linear;
-            -webkit-animation: rotation 2s linear infinite;
-        }
-        @keyframes rotation {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(359deg);
-          }
-        }
-        @-webkit-keyframes rotation {
-          0% { -webkit-transform: rotate(0deg); }
-          100% { -webkit-transform: rotate(360deg); }
-        }
-        .invalid {
-            background-color: palevioletred;
-        }
-        .valid {
-            background-color: palegreen;
-        }
-        .grabbing {cursor: zoom-in;}
-    </style>
-    <script>
-        const NAANJ_URL = "https://raw.githubusercontent.com/datadavev/naanj/main/data/naanj.json";
-        var NAANs = {};
-        var NAANi = {};
-        //Load NAANs from naanj
-        fetch(NAANJ_URL)
-            .then(response => response.json())
-            .then(data => {
-                NAANs=data;
-                for (var i=0; i < NAANs.naa.length; i++) {
-                    NAANi[NAANs.naa[i].what] = i;
-                }
-            });
-
-        function getSiteInfo() {
-            const url = "https://api.github.com/repos/datadavev/SNARK/commits/main";
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                var _sha = data.sha.substr(0,7);
-                var dmod = data.commit.author.date;
-                var msg = "Revision " + _sha + " at " + dmod;
-                document.getElementById("siteinfo").innerText = msg;
-            })
-        }
-    </script>
+    <!-- using alpine.JS for UI interaction -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/brython@3/brython_stdlib.js"></script>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"/>
+    <link rel="stylesheet" href="web/snark.css"/>
+    <!-- UI interaction code-->
+    <script src="web/snark.js"></script>
+    <!-- wrapper for the python lib -->
+    <script type="text/python" src="web/pyjs.py"></script>
 </head>
-<body onload="brython()">
+<body onload="onLoad()">
 
 <header>
     <h1>Simply Normal ARKs</h1>
-    <p><strong>Note: 2021-08-08 Not yet released.</strong> The normalization rules are not verified and are subject to change.</p>
-    <a href="https://github.com/datadavev/SNARK" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <p><strong>Note: 2021-08-08 Not yet released.</strong> The normalization rules are not verified and are subject to
+        change.</p>
+    <a href="https://github.com/datadavev/SNARK" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250"
+             style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                  fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                  fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
 </header>
 <main>
-    <article>
-        <section id="loader">
-            <img id="spinner" src="web/ouroboros.png" />
+    <article x-data="ARK_data">
+        <section id="loader" x-show="loading" x-transition.duration.1000ms>
+            <img id="spinner" src="web/ouroboros.png"/>
             <p>Loading...</p>
         </section>
 
-        <section id="snarker">
+        <section id="snarker" x-show="! loading">
             <p>Type in the supposed ARK:</p>
-            <form>
-                <input id="insnark" size="80" placeholder="https://fake.net/some/fake/ark:/12345/value"/>
-            </form>
+            <input id="insnark" size="80"
+                   placeholder="https://fake.net/some/fake/ark:/12345/value"
+                   x-model="input"
+                   x-on:input="update"
+                   @set-ark.window="input = $event.detail; update()"
+            />
             <div id="results">
-                <p id="ark"></p>
-                <details>
-                    <summary>Pieces of ARK</summary>
-                    <table>
-                        <tr><td>Inflection</td><td id="inflection"></td></tr>
-                        <tr><td>NAAN</td><td id="ark_naan"></td></tr>
-                        <tr><td>Name</td><td id="ark_name"></td></tr>
-                        <tr><td>Qualifier</td><td id="ark_qual"></td></tr>
-                        <tr><td>Issuer</td><td id="ark_issuer"></td></tr>
-                    </table>
-                </details>
+                <p x-text="pieces.ark"></p>
+                <table>
+                    <tr>
+                        <td>Inflection</td>
+                        <td x-text="inflection"></td>
+                    </tr>
+                    <tr>
+                        <td>NAAN</td>
+                        <td x-text="pieces.naan"></td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td x-text="pieces.name"></td>
+                    </tr>
+                    <tr>
+                        <td>Qualifier</td>
+                        <td x-text="pieces.qualifier"></td>
+                    </tr>
+                    <tr>
+                        <td>Issuer</td>
+                        <td x-text="issuer"></td>
+                    </tr>
+                </table>
                 <details>
                     <summary>Processing details</summary>
-                <pre id="outsnark">
+                    <pre x-text="lines">
                 </pre>
                 </details>
             </div>
@@ -153,132 +104,21 @@
                     value looks like an ARK identifier, then the identifier part of the string is highlighted
                     in <span class="valid">green</span>.
                 </p>
-                <p>For example, this <code id="eg_valid" class="grabbing">http://n2t.net/ark:/65665/30002e5e4-91a3-4343-9519-2aab489dfbfd</code>
+                <p>For example, this <code id="eg_valid" class="grabbing"
+                                           @click="$dispatch('set-ark', $event.target.innerText)">http://n2t.net/ark:/65665/30002e5e4-91a3-4343-9519-2aab489dfbfd</code>
                     should be valid.</p>
-                <p>This string <code id="eg_invalid" class="grabbing">https://example.net/ark:1234/invalid</code> should be invalid.</p>
-                <p>1. <a href="https://datatracker.ietf.org/doc/html/draft-kunze-ark-27#section-2.7">The ARK Identifier Scheme, draft-kunze-ark-27 § 2.7</a></p>
+                <p>This string <code id="eg_invalid" class="grabbing"
+                                     @click="$dispatch('set-ark', $event.target.innerText)">https://example.net/ark:1234/invalid</code>
+                    should be invalid.</p>
+                <p>1. <a href="https://datatracker.ietf.org/doc/html/draft-kunze-ark-27#section-2.7">The ARK Identifier
+                    Scheme, draft-kunze-ark-27 § 2.7</a></p>
             </details>
         </section>
     </article>
-    <footer>
-        <p id="siteinfo"></p>
+    <footer x-data="siteinfo" x-init="update()">
+        <p x-text="_info"></p>
     </footer>
 </main>
 
-
-
-<script type="text/python">
-'''
-Re-use the python implementation of the normalization routine.
-'''
-from browser import window, document
-import json
-import snark
-
-def doNormalizeARK(src):
-    res, infl = snark.normalizeARK(src)
-    return {"result":res, "inflection": infl.name}
-
-# Register the normalize method
-window.jsNormalizeARK = doNormalizeARK
-window.jsPiecesOfARK = snark.piecesOfARK
-
-# Page is loaded...
-document.getElementById("loader").style.display = "none";
-document.getElementById("results").style.display = "none";
-document.getElementById("snarker").style.display = "block";
-</script>
-
-<script onload="brython()">
-
-    function piecesOfARK(ark) {
-        var res = jsPiecesOfARK(ark);
-        return {
-            "valid": res["$string_dict"].valid[0],
-            "ark": res["$string_dict"].ark[0],
-            "naan": res["$string_dict"].naan[0],
-            "name": res["$string_dict"].name[0],
-            "qualifier": res["$string_dict"].qualifier[0],
-        }
-    }
-
-    function showResult(lines, infl, parts){
-        var rawdest = document.getElementById("outsnark");
-        var infdest = document.getElementById("inflection");
-        var arkdest = document.getElementById("ark");
-        if (lines.length > 0) {
-            document.getElementById("results").style.display = "block";
-            var t = "";
-            var nark = lines[lines.length-1];
-            for (var i=0; i<lines.length; i++) {
-                t = t + i + ": \"" + lines[i] + "\"\n"
-            }
-            infdest.innerText = infl;
-            arkdest.innerHTML = nark;
-            if (parts !== null) {
-                var _naa = {"who":{"literal":"Not a NAA"}};
-                var nidx = NAANi[parts.naan];
-                if (typeof nidx != "undefined") {
-                    _naa = NAANs.naa[nidx];
-                }
-                if (parts.valid) {
-                    arkdest.className = ""
-                    var s0 = nark.indexOf(parts.ark);
-                    var hark = nark.substr(0, s0) + "<span class=\"valid\">" + parts.ark + "</span>" + nark.substr(s0+parts.ark.length);
-                    arkdest.innerHTML = hark;
-                    document.getElementById("ark_naan").innerText = parts.naan;
-                    document.getElementById("ark_name").innerText = parts.name;
-                    document.getElementById("ark_qual").innerText = parts.qualifier;
-                    document.getElementById("ark_issuer").innerText = _naa.who.literal;
-                } else {
-                    arkdest.className = "invalid"
-                    document.getElementById("ark_naan").innerText = "";
-                    document.getElementById("ark_name").innerText = "";
-                    document.getElementById("ark_qual").innerText = "";
-                    document.getElementById("ark_issuer").innerText = "";
-                    infdest.innerText = "";
-                }
-
-                t += ((typeof parts.naan == "string") ? "\nNAAN:" + parts.naan : "");
-                t += ((typeof parts.name == "string") ? "\nName:" + parts.name : "");
-                t += ((typeof parts.qualifier == "string") ? "\nQual:" + parts.qualifier : "");
-                t += "\n" + JSON.stringify(_naa, null, 2);
-            }
-            rawdest.innerText = t;
-        } else {
-            document.getElementById("results").style.display = "none";
-        }
-    }
-function doSnark(eve) {
-    var src = eve.target.value;
-    if (src.length > 3) {
-        var res = jsNormalizeARK(eve.target.value);
-        var lines = res["$string_dict"].result[0];
-        var infl = res["$string_dict"].inflection[0];
-        var ark_parts = piecesOfARK(lines[lines.length-1])
-        showResult(lines, infl, ark_parts);
-    } else {
-        showResult([], null, null);
-    }
-}
-
-
-var ele = document.getElementById("insnark");
-ele.addEventListener('input', doSnark);
-
-document.getElementById("eg_valid").addEventListener('click',(e) => {
-    var ele = document.getElementById("insnark");
-    ele.value = e.target.innerText;
-    doSnark({"target": ele});
-});
-
-document.getElementById("eg_invalid").addEventListener('click',(e) => {
-    var ele = document.getElementById("insnark");
-    ele.value = e.target.innerText;
-    doSnark({"target": ele});
-});
-
-getSiteInfo();
-</script>
 </body>
 </html>
