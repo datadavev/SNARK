@@ -1,0 +1,97 @@
+body {
+  font-family: "Cousine", "Monaco", monospace;
+  font-size: 14px;
+}
+
+code {
+  font-size: inherit;
+}
+
+/*
+        pre {
+            font-family: inherit;
+        }
+        input {
+            font-family: inherit;
+            font-size: 1rem;
+        }
+         */
+#insnark {
+  width: 100%;
+}
+
+#snarker {
+  display: block;
+}
+
+#loader {
+  /* position: absolute; */
+  left: 40%;
+  top: 10%;
+  z-index: 1;
+  text-align: center;
+  min-height: 300px;
+}
+
+#spinner {
+  animation: rotation 2s infinite linear;
+  -webkit-animation: rotation 2s linear infinite;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@-webkit-keyframes rotation {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+.invalid {
+  background-color: palevioletred;
+}
+
+.valid {
+  background-color: palegreen;
+}
+.grabbing { cursor: zoom-in; }
+
+/* Github Corner pieces */
+
+
+.github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+@media (max-width: 500px) {
+  .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+
+  .github-corner:hover .octo-arm {
+    animation: none;
+  }
+}
