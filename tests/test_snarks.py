@@ -19,7 +19,7 @@ test_arks = [
     ],
     [
         "https://example.org/ark:12345/x54xz321/%23%40/",
-        "ark:12345/x54xz321/#@",
+        "ark:12345/x54xz321/%23%40",
         snark.Inflection.NONE,
     ],
     [
@@ -29,13 +29,13 @@ test_arks = [
     ],
     [
         "https://example.org/ARK:12345/x54xz321/s3/f8.05v.tiff%3F",
-        "ark:12345/x54xz321/s3/f8.05v.tiff",
-        snark.Inflection.METADATA,
+        "ark:12345/x54xz321/s3/f8.05v.tiff%3F",
+        snark.Inflection.NONE,
     ],
     [
         "https://example.org/ARK:12345/x54xz321/s3/f8.05v.tiff%3F%3F",
-        "ark:12345/x54xz321/s3/f8.05v.tiff",
-        snark.Inflection.POLICY,
+        "ark:12345/x54xz321/s3/f8.05v.tiff%3F%3F",
+        snark.Inflection.NONE,
     ],
 ]
 
